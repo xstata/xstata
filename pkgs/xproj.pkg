@@ -1,0 +1,34 @@
+v 3
+d xproj -- Tools to make, manage and build project in Stata
+d 
+d -xproj make- makes directory structure for a research project conveniently
+d using flexible specifications. -xproj make- uses dirtree internally to 
+d display the created directories in a tree-like format.
+d
+d Beside -xproj make- to make a bland-new project, -xproj- also provide 
+d subcommands -add-, -list-, -goto- and -drop- to manage pnames.
+d 
+d KW: workflow
+d KW: project management
+d KW: directory
+d KW: folder
+d KW: dirtree
+d 
+d Requires: Stata version 14
+d           community-contributed command -dirtree- (Version 1.0)
+d
+d Version: 0.3
+d Distribution-Date: 2022-11-05
+d 
+d Author:  Yongyi Zeng (Xiamen University, PRC)
+d Support: zzyy@xmu.edu.cn
+d 
+
+* comments, not be displayed.
+* f lines name the files that comprise your package.
+* F can force a default-not-installed file to be install to sysdir.
+* help net
+
+f xproj.ado
+f xproj.sthlp
+

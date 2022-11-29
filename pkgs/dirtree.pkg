@@ -1,0 +1,28 @@
+v 3
+d dirtree -- Display a directory's structure in a tree-like format
+d 
+d Display a directory's contents recursively in a tree-like format in
+d Stata's results window, which facilates you get a really nice and 
+d effective overview of the directory's structure.
+d 
+d KW: workflow
+d KW: directory
+d KW: folder
+d KW: tree
+d 
+d Requires: Stata version 14
+d
+d Version: 1.1
+d Distribution-Date: 2022-05-18
+d 
+d Author:  Yongyi Zeng (Xiamen University, PRC)
+d Support: zzyy@xmu.edu.cn
+d
+
+* comments, not be displayed.
+* f lines name the files that comprise your package.
+* F can force a default-not-installed file to be install to sysdir.
+* help net
+
+f dirtree.ado
+f dirtree.sthlp

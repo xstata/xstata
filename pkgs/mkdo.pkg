@@ -1,0 +1,27 @@
+v 3
+d mkdo -- Facilitate making sensible do-files
+d 
+d Make a do-file from template suggested by Long(2009) and then
+d open it in Stata's Do-file Editor for your furthur modification.
+d 
+d KW: workflow
+d KW: do-files
+d KW: template
+d 
+d Requires: Stata version 14
+d
+d Version: 2.4
+d Distribution-Date: 2022-11-06
+d 
+d Author:  Yongyi Zeng (Xiamen University, PRC)
+d Support: zzyy@xmu.edu.cn
+d 
+
+* comments, not be displayed.
+* f lines name the files that comprise your package.
+* F can force a default-not-installed file to be install to sysdir.
+* help net
+
+f mkdo.ado
+f mkdo.sthlp
+
