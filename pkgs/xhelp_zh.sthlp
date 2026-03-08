@@ -16,7 +16,7 @@
 {hline}
 {p2colset 1 10 12 2}{...}
 {p2col:{bf:xhelp} {hline 2}}
-创建与展示翻译版帮助文档的工具
+安装、创建与展示翻译版帮助文档的工具
 {p_end}
 {p2colreset}{...}
 

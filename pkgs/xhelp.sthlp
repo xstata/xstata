@@ -16,7 +16,7 @@
 {hline}
 {p2colset 1 10 12 2}{...}
 {p2col:{bf:xhelp} {hline 2}}
-Tools to create and display translated help files
+Tools to install, create and display translated help files
 {p_end}
 {p2colreset}{...}
 
