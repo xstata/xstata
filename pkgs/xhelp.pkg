@@ -8,10 +8,12 @@ d translated version not found).
 d 
 d Installation instruction:
 d 
-d  ```stata
-d net install xhelp.pkg  // install xhelp, or click `(click here to install)`
-d net get xhelp.pkg      // download the pre-packaged translated help files
-d xhelp, install         // install  the pre-packaged translated help files
+d ```stata
+d net install xhelp.pkg  // install xhelp, 
+d                        //   or click the `(click here to install)` link below.
+d net get xhelp.pkg      // download the pre-packaged translated help files, or
+d                        //   or click the `(click here to get)` link below.
+d xhelp, install         // install the pre-packaged translated help files.
 d ```
 d
 d KW: workflow
