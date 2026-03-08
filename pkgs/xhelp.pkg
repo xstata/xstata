@@ -6,6 +6,14 @@ d tools to edit original help files into translated version, pre-packaged
 d LLM-translated help files and display them (or the original one when 
 d translated version not found).
 d 
+d Installation instruction:
+d 
+d  ```stata
+d net install xhelp.pkg  // install xhelp, or click `(click here to install)`
+d net get xhelp.pkg      // download the pre-packaged translated help files
+d xhelp, install         // install  the pre-packaged translated help files
+d ```
+d
 d KW: workflow
 d KW: help system
 d 
