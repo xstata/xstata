@@ -261,10 +261,15 @@ version 1.1.0, {browse "http://fmwww.bc.edu/RePEc/bocode/m/mkproject.ado"}.
 {marker author}{...}
 {title:Author}
 
-{p2colset 5 36 38 2}{...}
-{p2col:Yongyi Zeng}Shangqi Jin{p_end}
-{p2col:zzyy@xmu.edu.cn}37620242205372@stu.xmu.edu.cn{p_end}
-{p2col:}{space 1}{p_end}
+{pstd}Yongyi Zeng{p_end}
+{pstd}zzyy@xmu.edu.cn{p_end}
+{pstd}School of Management{p_end}
+{pstd}Xiamen University{p_end}
+{pstd}China, PR.{p_end}
+
+{p2colset 5 40 42 2}{...}
+{p2col:Yancheng Chen}Shangqi Jin{p_end}
+{p2col:25120242201569@stu.xmu.edu.cn}37620242205372@stu.xmu.edu.cn{p_end}
 {p2col:School of Management}School of Management{p_end}
 {p2col:Xiamen University}Xiamen University{p_end}
 {p2col:China, PR.}China, PR.{p_end}

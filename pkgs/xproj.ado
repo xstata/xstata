@@ -2,9 +2,12 @@
 *! =======================================================================
 *!    Tools to make, manage and build project in Stata
 *! =======================================================================
-*! version 0.4, 2026-11-11, Shangqi Jin <37620242205372@stu.xmu.edu.cn> 
+*! version 0.4, 2026-11-11
 *!   - first version prepared for SSC Archive submission
 *!   - some minor tweaks to xproj.ado, xproj.sthlp & xproj.pkg
+*！  - add two new contributors / authors
+*!     - Yancheng Chen <25120242201569@stu.xmu.edu.cn>
+*!     - Shangqi  Jin  <37620242205372@stu.xmu.edu.cn>
 *! -----------------------------------------------------------------------
 *! version 0.3, 2022-11-05, Yongyi Zeng <zzyy@xmu.edu.cn>
 *!   - some minor tweaks to xproj.sthlp
