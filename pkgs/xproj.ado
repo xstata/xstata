@@ -5,7 +5,7 @@
 *! version 0.4, 2026-11-11
 *!   - first version prepared for SSC Archive submission
 *!   - some minor tweaks to xproj.ado, xproj.sthlp & xproj.pkg
-*！  - add two new contributors / authors
+*!   - add two new contributors / authors
 *!     - Yancheng Chen <25120242201569@stu.xmu.edu.cn>
 *!     - Shangqi  Jin  <37620242205372@stu.xmu.edu.cn>
 *! -----------------------------------------------------------------------
