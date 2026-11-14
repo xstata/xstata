@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.2 2022-05-18}{...}
+{* *! version 0.4 2026-11-11}{...}
 {vieweralsosee "[U] Naming Conventions" "mansection U 11.3Namingconventions"}{...}
 {vieweralsosee "[U] Project Manager" "mansection P ProjectManager"}{...}
 {vieweralsosee "" "--"}{...}
@@ -7,7 +7,7 @@
 {vieweralsosee "[D] cd" "help cd"}{...}
 {vieweralsosee "[D] dir" "help dir"}{...}
 {vieweralsosee "SSC" "--"}{...}
-{vieweralsosee "dirtree" "help dirtree"}{...}
+{vieweralsosee "xdtree" "help xdtree"}{...}
 {vieweralsosee "mkproject" "stata ssc desc mkproject"}{...}
 {vieweralsosee "fastcd" "stata ssc desc fastcd"}{...}
 {vieweralsosee "dirtools" "stata ssc desc dirtools"}{...}
@@ -92,7 +92,7 @@ do not list the added {it:pname} in Stata's results window
 {title:Description}
 
 {p 4 4 2}{cmd:xproj make} makes directory structure for a research project 
-conveniently using flexible specifications. {cmd:xproj make} uses {cmd:dirtree} 
+conveniently using flexible specifications. {cmd:xproj make} uses {cmd:xdtree} 
 internally to display the created directories in a tree-like format.
 
 {p 4 4 2}{it:pname} is the project's mnemonics, which follows Stata's 
@@ -248,7 +248,7 @@ the projects lookup table.{p_end}
 {phang}
 {marker long}{...}
 Long, J. Scott. 2009. 
-{browse "https://www.stata.com/bookstore/workflow-data-analysis-stata/":{it:The Workflow of Data Analysis: Principles and Practice}}. 
+{browse "https://www.stata.com/bookstore/workflow-data-analysis-stata/":{it:The Workflow of Data Analysis Using Stata}}. 
 "Chapter 2 Planning, organizing, and documenting". Stata Press. 
 
 {phang}
@@ -261,14 +261,17 @@ version 1.1.0, {browse "http://fmwww.bc.edu/RePEc/bocode/m/mkproject.ado"}.
 {marker author}{...}
 {title:Author}
 
-{pstd}Yongyi Zeng{p_end}
-{pstd}zzyy@xmu.edu.cn{p_end}
-
-{pstd}School of Management{p_end}
-{pstd}Xiamen University{p_end}
-{pstd}China, PR.{p_end}
+{p2colset 5 36 38 2}{...}
+{p2col:Yongyi Zeng}Shangqi Jin{p_end}
+{p2col:zzyy@xmu.edu.cn}37620242205372@stu.xmu.edu.cn{p_end}
+{p2col:}{space 1}{p_end}
+{p2col:School of Management}School of Management{p_end}
+{p2col:Xiamen University}Xiamen University{p_end}
+{p2col:China, PR.}China, PR.{p_end}
+{p2colreset}{...}
 
 {.-}
+{phang}version 0.4 @ 2026-11-11 [for SSC archive submission]{p_end}
 {pstd}version 0.3 @ 2022-11-05{p_end}
 {pstd}version 0.2 @ 2022-05-18{p_end}
 {pstd}version 0.1 @ 2021-05-01{p_end}

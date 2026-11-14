@@ -1,25 +1,35 @@
 
-*! ==================================================================
+*! =======================================================================
 *!    Tools to make, manage and build project in Stata
-*! ==================================================================
-*! version 0.3, 2022-11-05, yyzeng <zzyy@xmu.edu.cn>
+*! =======================================================================
+*! version 0.4, 2026-11-11, Shangqi Jin <37620242205372@stu.xmu.edu.cn> 
+*!   - first version prepared for SSC Archive submission
+*!   - some minor tweaks to xproj.ado, xproj.sthlp & xproj.pkg
+*! -----------------------------------------------------------------------
+*! version 0.3, 2022-11-05, Yongyi Zeng <zzyy@xmu.edu.cn>
 *!   - some minor tweaks to xproj.sthlp
-*! ------------------------------------------------------------------
-*! version 0.2, 2022-05-18, yyzeng <zzyy@xmu.edu.cn>
+*! -----------------------------------------------------------------------
+*! version 0.2, 2022-05-18, Yongyi Zeng <zzyy@xmu.edu.cn>
 *!   - fix the bug when creating XPROJ_LOOKUP_TABLE.txt 
 *!         in the non-existent directory `c(sysdir_personal)'
 *!   - some minor editing to xproj.sthlp & xproj.pkg
-*! ------------------------------------------------------------------
-*! version 0.1, 2021-05-01, yyzeng <zzyy@xmu.edu.cn>
+*! -----------------------------------------------------------------------
+*! version 0.1, 2021-05-01, Yongyi Zeng <zzyy@xmu.edu.cn>
 *!   - enhance mkproj v2.0
 *!     - with subcommands make, add, list, goto & drop
 *!     - with ideas from -fastcd-, -fileutils- & -workingdir-
 *!   - TODO: add functions from -project-
-*! ==================================================================
+*! =======================================================================
 
-capture program drop _all
 program define xproj
     version 14
+    
+    capture which xdtree
+    if _rc {
+        di as error "xproj requires xdtree. Install it from SSC:"
+        di as error "    {stata ssc install xdtree}"
+        exit 111
+    }
     
     local subcmds make mk add goto go list ls drop // zip
     
@@ -60,7 +70,7 @@ program define xproj_make
     // indir:      create pname in dir -indir-, default c(pwd)
     // dirs:       project's sub-dirs, default to docs, data/source, results, logs
     // note:       a short description of the project
-    // notree:     not print dir tree (via user-contributed -dirtree-)
+    // notree:     not print dir tree (via user-contributed -xdtree-)
     // noreadme:   not create readme.md file under project's root dir
     // nocd:       not change directory to project's root dir
     // noadd:      not be added to projects' lookup table
@@ -102,13 +112,13 @@ program define xproj_make
     mkdir "`pname'"
     qui cd "`pname'"
     capture noisily mata mkdirtree(`"`dirs'"')
-    scalar rc = _rc
-    if rc {
+    local rc = _rc
+    if `rc' {
         di _n as err "mata:mkdirtree() runs into error"
         di as err "You should open " as text `"{browse `"`indir'"'}"' _c
         di as err " and delect directory " `"`pname'"' " manually." _n
         quietly cd `"`pwd'"'  // back to WD
-        exit rc
+        exit `rc'
     }
     
     local note2 `"`note'"'
@@ -124,7 +134,7 @@ program define xproj_make
         di as res _n "The created project `pname' is in " `"{browse `"`c(pwd)'"'}."'
         quietly cd ..
         di as res _n "The project's directory structure: "
-        dirtree "`pname'", noclick
+        xdtree "`pname'", noclick
         quietly cd "`pname'"
     }
     
@@ -182,8 +192,8 @@ program define write_readme
     
     file write fh "## Author(s)" _n(2)
     
-    file write fh "   - Jia An, Xiamen Univ., xxx@xmu.edu.cn" _n
-    file write fh "   - Yi Bai, Peking Univ., yyy@pku.edu.cn" _n(3)
+    file write fh "   - San Zhan, Xiamen Univ., xxx@xmu.edu.cn" _n
+    file write fh "   - Si Li, Peking Univ., yyy@pku.edu.cn" _n(3)
     
     file write fh "## Description" _n(2)
     file write fh "<Project Description ...>" _n(3)
@@ -259,14 +269,19 @@ program define xproj_goto
     
     syntax name(name=pname id="project_name")
     
-    mata: proj_goto("`pname'")
-    if !_rc {
+    capture mata: proj_goto("`pname'")
+    local goto_rc = _rc
+    if !`goto_rc' {
         di as text "Working directory has been changed to `proj_path' " _c
         di as text "(i.e., project `pname''s root directory)."
     }
+    else if `goto_rc' == 111 {
+        di as err "Project `pname' not found - Check it!"
+        exit `goto_rc'
+    }
     else {
         di as err "Can't change working directory to `proj_path' - Check it!"
-        exit _rc
+        exit `goto_rc'
     }
     
 end
@@ -308,9 +323,9 @@ end
 
 
 version 14
-set matastrict on
 
-mata: mata clear
+local _saved_matastrict = c(matastrict)
+set matastrict on
 
 mata:
 
@@ -439,9 +454,9 @@ string matrix read_lookup_table() {
 }
 
 void write_lookup_table(string matrix lookupM) {
-    string scalar path, line
+    string scalar path, line, dir
 	string vector dirV
-    real   scalar fh, i
+    real   scalar fh, i, j
     
 	// make path `c(sysdir_personal)' if non-existent
 	path = st_global("c(sysdir_personal)")
@@ -535,10 +550,14 @@ void proj_goto(string scalar pname) {
     lookupM = read_lookup_table()
     
     lookupM = select(lookupM, lookupM[, 1] :== pname)
-    path = lookupM[, 2]
+    if (rows(lookupM) != 1) {
+        errprintf("Project not found: %s\n", pname)
+        exit(111)
+    }
+    path = lookupM[1, 2]
     st_local("proj_path", path)
     
-    stata(sprintf("capture cd %s", path))
+    stata(sprintf(`"cd "%s""', path))
 }
 
 void proj_drop(string scalar pname) {
@@ -557,17 +576,7 @@ void proj_drop(string scalar pname) {
     }
 }
 
-// void proj_zip_path(string scalar pname) {
-//     string matrix lookupM
-//     string scalar path
-//    
-//     lookupM = read_lookup_table()
-//    
-//     lookupM = select(lookupM, lookupM[, 1] :== pname)
-//     path = lookupM[, 2]
-//     st_local("proj_path", path)
-// }
-
 end
+set matastrict `_saved_matastrict'
 
 exit
