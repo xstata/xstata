@@ -1,6 +1,15 @@
 *! ==================================================================
 *!      Display a directory's structure in a tree-like format
 *! ==================================================================
+*! version 1.2, 2026-11-11
+*!   - first version prepared for SSC Archive submission
+*!   - rename dirtree to xdtree
+*!   - rewrite mata: dir_ls(), dir_tree(), print_leaf() with struct
+*!   - some minor editing to xdtree.sthlp & xdtree.pkg
+*!   - add two new contributors / authors
+*!     - Yancheng Chen <25120242201569@stu.xmu.edu.cn>
+*!     - Bowen    Wang <34520232201140@stu.xmu.edu.cn>
+*! ------------------------------------------------------------------
 *! version 1.1, 2022-05-18, yyzeng <zzyy@xmu.edu.cn>
 *!   - change the default -levels()- from 10 to 3
 *!   - some minor editing to dirtree.sthlp & dirtree.pkg
@@ -8,8 +17,7 @@
 *! version 1.0, 2021-04-01, yyzeng <zzyy@xmu.edu.cn>
 *! ==================================================================
 
-*capture program drop _all
-program define dirtree
+program define xdtree
     version 14
     syntax [anything(id="path" name=path)]    ///
            [, noRECurse Levels(integer 3)   ///
@@ -23,10 +31,10 @@ program define dirtree
     // Open:    Open directory/folder window in the operating system 
     // click:   Show "Click >>> HERE << to browse the directory"
     
-    // eg., 1. dirtree
-    //      2. dirtree, o
-    //      3. dirtree foo, norec
-    //      4. dirtree foo/bar, l(3) glob(*.do, rev noc)
+    // eg., 1. xdtree
+    //      2. xdtree, o
+    //      3. xdtree foo, norec
+    //      4. xdtree foo/bar, l(3) glob(*.do, rev noc)
     
     if `"`path'"' == "" {
         local path = "."
@@ -57,6 +65,7 @@ program define dirtree
     
     if `"`glob'"' != "" & `"`regex'"' != "" {
         di as err "option {bf:glob()} and {bf:regex()} can't be set simultaneously."
+        exit 198
     }
     if `"`glob'"' != "" {
         parse_glob_regex `glob'
@@ -123,12 +132,19 @@ program define opendir
     
 end
 
+local _saved_matastrict = c(matastrict)
 set matastrict on
 
 mata:
 
 version 14
 //mata clear
+
+struct dirlist {
+    string vector name
+    string vector parent
+    real   vector isdir
+}
 
 string scalar path_normalize(string scalar path) {
     // Convert file paths to canonical form for the OS platform
@@ -176,37 +192,56 @@ string scalar glob2rx(string scalar pattern){
     return(rx)
 }
 
-string vector function dir_ls(string scalar path,      ///
-                              real   scalar recurse,   ///
-                              real   scalar levels,    ///
-                              string scalar regex,     ///
-                              real   scalar revert,    ///
-                              string scalar pattern,   ///
-                              real   scalar nocase) {
-    // Collect dirs and files in the path (recursively) to a vector
-    
-    string vector lsV, dirsV, filesV
-    real   scalar i
-    
-    lsV = J(0, 1, "")  // dir-list vector to return()
-    
+struct dirlist scalar dir_ls(string scalar path,      ///
+                             real   scalar recurse,   ///
+                             real   scalar levels,    ///
+                             string scalar regex,     ///
+                             real   scalar revert,    ///
+                             string scalar pattern,   ///
+                             real   scalar nocase) {
+    // Collect dirs and files in the path (recursively) to struct dirlist R
+
+    struct dirlist scalar R, C
+    string         vector dirsV, filesV
+    string         scalar pathJ, name
+    real           scalar i
+
+    while(regexm(path, "[/\\]$")) path = substr(path, 1, strlen(path)-1)
+
+    R.name   = J(0, 1, "")
+    R.parent = J(0, 1, "")
+    R.isdir  = J(0, 1, .)
+
     dirsV = dir(path, "dirs", "*", 1)
-    if(dirsV != J(0, 1, "")) {
-        for (i=1; i<=length(dirsV); i++){
-            lsV = lsV \ dirsV[i,]
+    if(length(dirsV)) {
+        dirsV = dirsV[order(ustrlower(dirsV), 1), ]
+        for(i=1; i<=length(dirsV); i++) {
+            name  = pathbasename(dirsV[i])
+            pathJ = pathjoin(path, name)
+            R.name   = R.name   \ name
+            R.parent = R.parent \ path
+            R.isdir  = R.isdir  \ 1
             if(recurse == 1 & levels > 1) {
-                lsV = lsV \   ///
-                      dir_ls(dirsV[i,], 1, levels-1, regex, revert, pattern, nocase)
+                C        = dir_ls(pathJ, 1, levels-1, regex, revert, pattern, nocase)
+                R.name   = R.name   \ C.name
+                R.parent = R.parent \ C.parent
+                R.isdir  = R.isdir  \ C.isdir
             }
         }
     }
-    
+
     filesV = dir(path, "files", "*", 1)  // prefix = 1
-    filesV = filesV[order(ustrlower(filesV), 1), ]
-    filesV = files_rx(filesV, regex, revert, nocase)  // handle glob / regex
-    lsV = lsV \ filesV
-    
-    return(lsV)
+    if(length(filesV)) {
+        filesV = filesV[order(ustrlower(filesV), 1), ]
+        filesV = files_rx(filesV, regex, revert, nocase)  // handle glob / regex
+        for(i=1; i<=length(filesV); i++) {
+            R.name   = R.name   \ pathbasename(filesV[i])
+            R.parent = R.parent \ path
+            R.isdir  = R.isdir  \ 0
+        }
+    }
+
+    return(R)
 }
 
 string vector files_rx(string vector filesV, ///
@@ -269,70 +304,74 @@ string vector files_rx(string vector filesV, ///
     }
 }
 
-void function left_align(string vector strV) {
-    real scalar i
-    
-    for(i=1; i<=length(strV); i++) {
-        printf("%-60s\n", strV[i,])
-    }
-}
+// void left_align(string vector strV) {
+//     real scalar i
+//     
+//     for(i=1; i<=length(strV); i++) {
+//         printf("%-60s\n", strV[i,])
+//     }
+// }
 
-void function dir_tree(string scalar path,       ///
-                       real   scalar recurse,       ///
-                       real   scalar levels,     ///
-                       string scalar regex,      ///
-                       real   scalar revert,     ///
-                       string scalar pattern,    ///
-                       real   scalar nocase) {
+void dir_tree(string scalar path,       ///
+              real   scalar recurse,    ///
+              real   scalar levels,     ///
+              string scalar regex,      ///
+              real   scalar revert,     ///
+              string scalar pattern,    ///
+              real   scalar nocase) {
     // print path in tree-like format (recursively)
-    
-    string vector lsV, pathsV, filesV
-    string scalar pathS, fileS, ch
-    real   scalar i
-    
-    lsV = dir_ls(path, recurse, levels, regex, revert, pattern, nocase)
-    
-    pathsV = J(0, 1, "")   // path removed last element
-    filesV = J(0, 1, "")   // path's last element
-    for(i=1; i<=length(lsV); i++) {
-        pathsplit(lsV[i], pathS = "", fileS = "")
-        pathsV = pathsV \ pathS
-        filesV = filesV \ fileS
-    }
-    filesV = usubinstr(filesV, "*PAT*", pattern, .)
-    
-    ch = "-", "|", "\", "+"  // ch = "─", "│", "└", "├"
-    
+
+    struct dirlist scalar L
+    string vector ch
+
+    L = dir_ls(path, recurse, levels, regex, revert, pattern, nocase)
+    L.name = usubinstr(L.name, "*PAT*", pattern, .)
+
+    ch = "-", "|", "\", "+", "📂", "📄"
+    // ch = "─", "│", "└", "├", "📂", "📄"
+
     display(sprintf("{hline %s}", ///
             strofreal(rowmin((st_numscalar("c(linesize)")-10, 70)))))
     displayas("text")
-    printf("    " + path + "\n")
-    print_leaf(pathsV, filesV, path, ch, "    ")
+    printf("    " + ch[5] + " " + path + "/" + "\n")
+    print_leaf(L, path, ch, "    ")
     display(sprintf("{hline %s}", ///
             strofreal(rowmin((st_numscalar("c(linesize)")-10, 70)))))
 }
 
-void print_leaf(string vector pathsV, ///
-                string vector filesV, ///
-                string scalar path,  ///
-                string vector ch,    ///
+void print_leaf(struct dirlist scalar L, ///
+                string scalar path,      ///
+                string vector ch,        ///
                 string scalar indent) {
-    // print dirs & files in tree-like format
-    
-    string vector leafs
-    string scalar pathJ
-    real   scalar i
-    
-    leafs = select(filesV, pathsV :== path)
-    for(i=1; i<=length(leafs); i++) {
-        pathJ = pathjoin(path, leafs[i])
-        if(i == length(leafs)) {
-            printf(indent + ch[3] + ch[1] + ch[1] + " " + leafs[i] + "\n")
-            print_leaf(pathsV, filesV, pathJ, ch, indent + "    ")
+
+    string scalar pathJ, name, icon
+    real   vector idx
+    real   scalar k, j
+
+    if(!length(L.name)) return
+
+    idx = select(1::length(L.name), L.parent :== path)
+    for(k=1; k<=length(idx); k++) {
+        j     = idx[k]
+        name  = L.name[j]
+        pathJ = pathjoin(path, name)
+
+        if(L.isdir[j]) {
+            shown = name + "/"
+            icon = ch[5] + " "
         }
         else {
-            printf(indent + ch[4] + ch[1] + ch[1] + " " + leafs[i] + "\n")
-            print_leaf(pathsV, filesV, pathJ, ch, indent + ch[2] + "   ")
+            shown = name
+            icon = ch[6] + " "
+        }
+
+        if(k == length(idx)) {
+            printf(indent + ch[3] + ch[1] + ch[1] + icon + shown  + "\n")
+            if(L.isdir[j]) print_leaf(L, pathJ, ch, indent + "    ")
+        }
+        else {
+            printf(indent + ch[4] + ch[1] + ch[1] + icon + shown + "\n")
+            if(L.isdir[j]) print_leaf(L, pathJ, ch, indent + ch[2] + "   ")
         }
     }
 }
