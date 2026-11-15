@@ -160,4 +160,3 @@ version 1.0.1, {browse "http://fmwww.bc.edu/RePEc/bocode/o/opendir.ado"}.
 {pstd}version 1.0 @ 2021-04-01{p_end}
 {center:{c 169} 2021 YongyiZeng}
 
-{pstd}SSC preparation revision 1.1.1 02Nov2026.{p_end}
