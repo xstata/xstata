@@ -34,4 +34,6 @@ d
 * help net
 
 f xhelp.ado
+f xhelp.sthlp
+f xhelp_zh.sthlp
 f xhelp_sthlps.zip

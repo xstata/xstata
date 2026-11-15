@@ -198,11 +198,18 @@ so as to modify its default behavior.
 
 {pstd}Yongyi Zeng{p_end}
 {pstd}zzyy@xmu.edu.cn{p_end}
-
 {pstd}School of Management{p_end}
 {pstd}Xiamen University{p_end}
 {pstd}China, PR.{p_end}
 
+{p2colset 5 40 42 2}{...}
+{p2col:Bailiang Song}Hongqiang Xu{p_end}
+{p2col:School of Management}School of Management{p_end}
+{p2col:Xiamen University}Xiamen University{p_end}
+{p2col:China, PR.}China, PR.{p_end}
+{p2colreset}{...}
+
 {.-}
 {pstd}version 1.0 @ 2026-03-08{p_end}
-{center:{c 169} 2026 YongyiZeng}
+{pstd}version 0.1 @ 2022-06-20{p_end}
+{center:{c 169} 2022 YongyiZeng}
