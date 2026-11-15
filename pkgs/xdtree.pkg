@@ -1,5 +1,5 @@
 v 3
-d dirtree -- Display a directory's structure in a tree-like format
+d xdtree -- Display a directory's structure in a tree-like format
 d 
 d Display a directory's contents recursively in a tree-like format in
 d Stata's results window, which facilitates you get a really nice and 
