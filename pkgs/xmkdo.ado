@@ -2,6 +2,14 @@
 *! ==================================================================
 *!              Make a do-file from template
 *! ==================================================================
+*! version 2.5, 2026-11-11
+*!   - first version prepared for SSC Archive submission
+*!   - rename mkdo to xmkdo
+*!   - some minor editing to xmkdo.ado, xmkdo.sthlp & xmkdo.pkg
+*!   - add two new contributors / authors
+*!     - Yancheng Chen <25120242201569@stu.xmu.edu.cn>
+*!     - Jinle    Yan  <17420242200903@stu.xmu.edu.cn>
+*! ------------------------------------------------------------------
 *! version 2.4, 2022-11-06, yyzeng <zzyy@xmu.edu.cn>
 *!   - fix the bug with -wsok- option
 *!   - some minor treaks to mkdo.ado & mkdo.sthlp
@@ -26,8 +34,8 @@
 *! version 1.0, 2010-05-18, yyzeng <zzyy@xmu.edu.cn>
 *! ==================================================================
 
-*capture program drop _all
-program define mkdo
+program define xmkdo
+    // version 14    // would affect the generated do-file templates
     local version = c(version)
     syntax using/ [, Main SA Version(real `version') Lsize(integer 80) ///
                      LOG(string) AUthor(string) TS(string) REPLACE     ///
@@ -43,10 +51,10 @@ program define mkdo
     // plain:   plainify baroque section headings
     // noedit:  do not open do-file in do-editor
     
-    // eg., 1. mkdo using dm01_import.do, v(15) l(90) log(s) au(zen) ts(2021/03/18) replace
-    //      2. mkdo using dm02_clean.do, replace
-    //      3. mkdo using sa01_regress.do, sa replace
-    //      4. mkdo using _main_.do, main replace
+    // eg., 1. xmkdo using dm01_import.do, v(15) l(90) log(s) au(zen) ts(2021/03/18) replace
+    //      2. xmkdo using dm02_clean.do, replace
+    //      3. xmkdo using sa01_regress.do, sa replace
+    //      4. xmkdo using _main_.do, main replace
     
     local using = ustrtrim(`"`using'"')
     if "`wsok'" == "" {
@@ -66,7 +74,8 @@ program define mkdo
         }
     }
     if usubstr("`using'", -3, 3) == ".do" {
-        local using = usubinstr("`using'", ".do", "", .)
+        // local using = usubinstr("`using'", ".do", "", .)
+        local using = usubstr("`using'", 1, ustrlen("`using'") - 3)
     }
     
     if ("`main'" != "") & ("`sa'" != "") {
@@ -217,7 +226,7 @@ program define mk_dm
     file write fh "quietly compress" _n
     file write fh "label data <...>" _n
     file write fh "notes _dta: <...>\ " "`using'.do \ "
-    file write fh "`author' @ " "TS" _n
+    file write fh "`author' @ " "TS" _n     // real-time TS when saving
     file write fh "datasignature set, reset" _n
     file write fh "codebook, problems" _n
     file write fh "codebook, compact" _n
@@ -307,10 +316,10 @@ program define plainify
             file write `out' "* ===============================================" _n
         }
         else if `"`line'"' == "//-----------------------------------------------------------------------/" {
-            file write `out'  "//--------------------------------------" _n
+            file write `out'  "//======================================" _n
         }
         else if `"`line'"' == "//----------------------------------------/" {
-            file write `out'  "//======================================" _n
+            file write `out'  "//--------------------------------------" _n
         }
         else if strpos(`"`line'"', "//  #") == 1 {
             file read `in' line2

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.3 2022-05-18}{...}
+{* *! version 2.5 2026-11-11}{...}
 {vieweralsosee "[U] Do-files" "mansection U 16Do-files"}{...}
 {vieweralsosee "" "--"}{...}
 {vieweralsosee "[R] doedit" "help doedit"}{...}
@@ -11,22 +11,22 @@
 {vieweralsosee "[D] clear" "help clear"}{...}
 {vieweralsosee "[P] macro drop" "help macro drop"}{...}
 {vieweralsosee "[P] creturn" "help creturn"}{...}
-{viewerjumpto "Syntax" "mkdo##syntax"}{...}
-{viewerjumpto "Description" "mkdo##description"}{...}
-{viewerjumpto "Options" "mkdo##options"}{...}
-{viewerjumpto "Examples" "mkdo##examples"}{...}
-{viewerjumpto "Stored results" "mkdo##results"}{...}
-{viewerjumpto "References" "mkdo##references"}{...}
-{viewerjumpto "Author" "mkdo##author"}{...}
-{p2colset 1 9 11 2}{...}
-{p2col:{bf:mkdo} {hline 2}}Make a do-file from template{p_end}
+{viewerjumpto "Syntax" "xmkdo##syntax"}{...}
+{viewerjumpto "Description" "xmkdo##description"}{...}
+{viewerjumpto "Options" "xmkdo##options"}{...}
+{viewerjumpto "Examples" "xmkdo##examples"}{...}
+{viewerjumpto "Stored results" "xmkdo##results"}{...}
+{viewerjumpto "References" "xmkdo##references"}{...}
+{viewerjumpto "Author" "xmkdo##author"}{...}
+{p2colset 1 10 12 2}{...}
+{p2col:{bf:xmkdo} {hline 2}}Make a do-file from template{p_end}
 {p2colreset}{...}
 
 
 {marker syntax}{...}
 {title:Syntax}
 
-{p 4 27 2}{cmd:mkdo} {cmd:using} {it:{help filename}}
+{p 4 28 2}{cmd:xmkdo} {cmd:using} {it:{help filename}}
  [{cmd:,} {opt m:ain} {opt sa} {opt v:ersion(#)} {opt l:size(#)} 
  {opt au:thor(name)} {opt log(logtype)} {opt ts(text)} {opt p:lain} 
  {opt replace} {opt ws:ok} {opt noed:it}]
@@ -35,8 +35,8 @@
 {marker description}{...}
 {title:Description}
 
-{p 4 4 2}{cmd:mkdo} makes a do-file from the templates recommended
-by {help mkdo##long:Long(2009)} and then open it in Stata's Do-file Editor for 
+{p 4 4 2}{cmd:xmkdo} makes a do-file from the templates recommended
+by {help xmkdo##long:Long(2009)} and then open it in Stata's Do-file Editor for 
 further modification. It could be a springboard for you to set up your 
 own sensible do-files.
 
@@ -85,7 +85,7 @@ value {opt c(current_date)} by default.
 
 {p 4 8 2}{opt p:lain} plainifies the baroque section headings in the do-file.
 
-{p 4 8 2}{opt replace} permits {cmd:mkdo} to overwrite an existing do-file 
+{p 4 8 2}{opt replace} permits {cmd:xmkdo} to overwrite an existing do-file 
 {it:filename} - set it with care!
 
 {p 4 8 2}{opt ws:ok} keeps whitespaces in do-file's {it:filename}.
@@ -96,25 +96,25 @@ value {opt c(current_date)} by default.
 {marker results}{...}
 {title:Returned results}
 
-{p 4 8 2}{cmd:mkdo} returns nothing.
+{p 4 8 2}{cmd:xmkdo} returns nothing.
 
 
 {marker examples}{...}
 {title:Examples}
 
 {p 4 7 2}1. Make a do-file for data management task ({it:w/wo} options set):{p_end}
-{p 7 14 2}. {stata mkdo using dm01_import.do}{p_end}
-{p 7 14 2}. {stata mkdo using dm01_import, v(14) l(90) log(s) au(zeng) ts(2021/03/15) replace}{p_end}
+{p 7 14 2}. {stata xmkdo using dm01_import.do}{p_end}
+{p 7 14 2}. {stata xmkdo using dm01_import, v(14) l(90) log(s) au(zeng) ts(2021/03/15) replace}{p_end}
 
 {p 4 7 2}2. Make a do-file for statistical analysis task ({it:w/wo} options set):{p_end}
-{p 7 14 2}. {stata mkdo using sa01_desc.do, sa}{p_end}
-{p 7 14 2}. {stata mkdo using sa01_desc, sa v(14) l(90) log(s) au(zeng) ts(2021/03/15) replace}{p_end}
+{p 7 14 2}. {stata xmkdo using sa01_desc.do, sa}{p_end}
+{p 7 14 2}. {stata xmkdo using sa01_desc, sa v(14) l(90) log(s) au(zeng) ts(2021/03/15) replace}{p_end}
 
 {p 4 7 2}3. Make a do-file to run other do-files in sequence ({it:w/wo} options set): {p_end}
-{p 7 14 2}. {stata mkdo using _main_.do, main}{p_end}
-{p 7 14 2}. {stata mkdo using _main_, m v(14) log(s) au(zeng) ts(2021/03/15) replace}{p_end}
+{p 7 14 2}. {stata xmkdo using _main_.do, main}{p_end}
+{p 7 14 2}. {stata xmkdo using _main_, m v(14) log(s) au(zeng) ts(2021/03/15) replace}{p_end}
 
-{p 4 7 2}4. And clear the generated files now if you will: {p_end}
+{p 4 7 2}4. Now delele the generated files if you will, but be careful: {p_end}
 {p 7 14 2}. {stata erase dm01_import.do}{p_end}
 {p 7 14 2}. {stata erase sa01_desc.do}{p_end}
 {p 7 14 2}. {stata erase _main_.do}{p_end}
@@ -126,7 +126,7 @@ value {opt c(current_date)} by default.
 {phang}
 {marker long}{...}
 Long, J. Scott. 2009. 
-{browse "https://www.stata.com/bookstore/workflow-data-analysis-stata/":{it:The Workflow of Data Analysis: Principles and Practice}}. 
+{browse "https://www.stata.com/bookstore/workflow-data-analysis-stata/":{it:The Workflow of Data Analysis Using Stata}}. 
 "Chapter 3 Writing and debugging do-files". Stata Press. 
 
 
@@ -135,12 +135,20 @@ Long, J. Scott. 2009.
 
 {pstd}Yongyi Zeng{p_end}
 {pstd}zzyy@xmu.edu.cn{p_end}
-
 {pstd}School of Management{p_end}
 {pstd}Xiamen University{p_end}
 {pstd}China, PR.{p_end}
 
+{p2colset 5 40 42 2}{...}
+{p2col:Yancheng Chen}Jinle Yan{p_end}
+{p2col:25120242201569@stu.xmu.edu.cn}17420242200903@stu.xmu.edu.cn{p_end}
+{p2col:School of Management}School of Management{p_end}
+{p2col:Xiamen University}Xiamen University{p_end}
+{p2col:China, PR.}China, PR.{p_end}
+{p2colreset}{...}
+
 {.-}
+{phang}version 2.5 @ 2026-11-11 [for SSC archive submission]{p_end}
 {pstd}version 2.4 @ 2022-11-03{p_end}
 {pstd}version 2.3 @ 2022-05-18{p_end}
 {pstd}version 2.2 @ 2021-05-19{p_end}

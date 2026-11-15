@@ -1,5 +1,5 @@
 v 3
-d mkdo -- Facilitate making sensible do-files
+d xmkdo -- Scaffolding for sensible do-files
 d 
 d Make a do-file from template suggested by Long(2009) and then
 d open it in Stata's Do-file Editor for your furthur modification.
@@ -10,12 +10,17 @@ d KW: template
 d 
 d Requires: Stata version 14
 d
-d Version: 2.4
-d Distribution-Date: 2022-11-06
+d Version: 2.5
+d Distribution-Date: 2026-11-11
 d 
 d Author:  Yongyi Zeng (Xiamen University, PRC)
 d Support: zzyy@xmu.edu.cn
 d 
+d Author:  Yancheng Chen (Xiamen University, PRC)
+d Support: 25120242201569@stu.xmu.edu.cn
+d 
+d Author:  Jinle Yan (Xiamen University, PRC)
+d Support: 17420242200903@stu.xmu.edu.cn
 
 * comments, not be displayed.
 * f lines name the files that comprise your package.
