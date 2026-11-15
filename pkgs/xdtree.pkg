@@ -29,5 +29,5 @@ d Support: 34520232201140@stu.xmu.edu.cn
 * F can force a default-not-installed file to be install to sysdir.
 * help net
 
-f dirtree.ado
-f dirtree.sthlp
+f xdtree.ado
+f xdtree.sthlp

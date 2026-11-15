@@ -27,6 +27,6 @@ d Support: 17420242200903@stu.xmu.edu.cn
 * F can force a default-not-installed file to be install to sysdir.
 * help net
 
-f mkdo.ado
-f mkdo.sthlp
+f xmkdo.ado
+f xmkdo.sthlp
 
